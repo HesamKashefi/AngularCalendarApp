@@ -1,0 +1,42 @@
+<h1>Calendar</h1>
+
+<div style="display: grid; gap: 0.5rem;">
+
+    <div class="week-days-lables">
+        <div>
+            <p>Sunday</p>
+        </div>
+        <div>
+            <p>Monday</p>
+        </div>
+        <div>
+            <p>Tuesday</p>
+        </div>
+        <div>
+            <p>Wednesday</p>
+        </div>
+        <div>
+            <p>Thursday</p>
+        </div>
+        <div>
+            <p>Friday</p>
+        </div>
+        <div>
+            <p>Saturday</p>
+        </div>
+    </div>
+    @if(currentMonth) {
+
+    @for(row of currentMonth; track index; let index = $index) {
+    <div class="week-days">
+        @for(day of row; track day) {
+        <div [class.is-current-month]="isInTheCurrentMonth(day)">
+            <p>{{ day | appDisplayDate }}</p>
+        </div>
+        }
+    </div>
+    }
+
+    }
+
+</div>

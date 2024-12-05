@@ -1,0 +1,36 @@
+h1 {
+    text-align: center;
+}
+
+.week-days-lables,
+.week-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.5rem;
+
+
+    div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: 1px solid black;
+        padding: 2rem;
+
+        p {
+            font-weight: bold;
+            margin: 0;
+        }
+    }
+}
+
+.week-days {
+    .is-current-month {
+        cursor: pointer;
+    }
+
+    :not(.is-current-month) {
+        p {
+            color: rgb(141, 141, 141) !important;
+        }
+    }
+}
