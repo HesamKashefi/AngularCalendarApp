@@ -3,13 +3,20 @@ import { CalendarService } from '../../services/Calendar.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { DisplayMonthPipe } from '../../pipes/DisplayMonth.pipe';
-import { MatDialog } from "@angular/material/dialog";
 import { Store } from '@ngrx/store';
 import { Appointment } from '../../models/appointment';
 import * as actions from '../../store/actions/appointments.actions';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CalendarDayComponent } from './calendar-day/calendar-day.component';
-
+import { animate, query, stagger, style, transition, trigger } from '@angular/animations';
+const listAnimation = trigger('listAnimation', [
+  transition(':enter', [
+    query('*',
+      [style({ opacity: 0 }), stagger('60ms', animate('600ms ease-out', style({ opacity: 1 })))],
+      { optional: true }
+    ),
+  ])
+]);
 @Component({
   selector: 'app-calendar',
   imports: [
@@ -21,7 +28,8 @@ import { CalendarDayComponent } from './calendar-day/calendar-day.component';
     MatIconModule
   ],
   templateUrl: './calendar.component.html',
-  styleUrl: './calendar.component.scss'
+  styleUrl: './calendar.component.scss',
+  animations: [listAnimation]
 })
 export class CalendarComponent implements OnInit {
   private destroyRef$ = inject(DestroyRef);
@@ -41,8 +49,7 @@ export class CalendarComponent implements OnInit {
 
   constructor(
     private store: Store<{ appointments: Appointment[] }>,
-    private calendarService: CalendarService,
-    private matDialog: MatDialog) {
+    private calendarService: CalendarService) {
   }
 
   ngOnInit(): void {
@@ -71,10 +78,5 @@ export class CalendarComponent implements OnInit {
 
   timeToDate(time: number) {
     return new Date(time);
-  }
-
-  getAppointments(date: Date) {
-    const dateString = date.toISOString().split('T')[0];
-    return this.appointments.filter(x => x.date.toISOString().split('T')[0] === dateString);
   }
 }
