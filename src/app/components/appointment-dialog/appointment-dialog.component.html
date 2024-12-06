@@ -30,24 +30,41 @@
         </form>
     </div>
     <div mat-dialog-actions>
-        <button mat-stroked-button
-                color="primary"
-                [disabled]="form.invalid || form.pristine"
-                (click)="submit()">
-            <div class="d-flex gap-2">
-                <i class="bi bi-floppy2"></i>
-                <span>save</span>
-            </div>
-        </button>
+        <div class="d-flex justify-content-between w-100">
 
-        <button mat-stroked-button
-                color="accent"
-                (click)="cancel()">
-            <div class="d-flex gap-2">
-                <i class="bi bi-x-lg"></i>
-                <span>cancel</span>
+            <div>
+                @if(data.appointment) {
+                <button mat-stroked-button
+                        (click)="onDelete()">
+                    <div class="d-flex gap-2">
+                        <i class="bi bi-trash2"></i>
+                        <span>Delete</span>
+                    </div>
+                </button>
+                }
             </div>
-        </button>
 
+            <div class="d-flex">
+                <button mat-stroked-button
+                        color="primary"
+                        [disabled]="form.invalid || form.pristine"
+                        (click)="submit()">
+                    <div class="d-flex gap-2">
+                        <i class="bi bi-floppy2"></i>
+                        <span>save</span>
+                    </div>
+                </button>
+
+                <button mat-stroked-button
+                        color="accent"
+                        (click)="cancel()">
+                    <div class="d-flex gap-2">
+                        <i class="bi bi-x-lg"></i>
+                        <span>cancel</span>
+                    </div>
+                </button>
+            </div>
+
+        </div>
     </div>
 </section>

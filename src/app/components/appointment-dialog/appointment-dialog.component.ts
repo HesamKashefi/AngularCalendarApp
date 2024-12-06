@@ -6,6 +6,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ExtractErrorsDirective } from '../../directives/extract-errors.directive';
 import { Appointment } from '../../models/appointment';
+import { Store } from '@ngrx/store';
+import * as actions from '../../store/actions/appointments.actions';
 
 export interface AppointmentDialogData {
   date: Date;
@@ -49,6 +51,7 @@ export class AppointmentDialogComponent implements OnInit {
 
 
   constructor(
+    private store: Store<{ appointments: Appointment[] }>,
     private dialogRef: MatDialogRef<AppointmentDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: AppointmentDialogData) {
   }
@@ -86,6 +89,11 @@ export class AppointmentDialogComponent implements OnInit {
   }
 
   cancel() {
+    this.dialogRef.close();
+  }
+
+  onDelete() {
+    this.store.dispatch(actions.appointmentsActions.removeAppointment({ appointmentId: this.data.appointment!.appointmentId }))
     this.dialogRef.close();
   }
 }
