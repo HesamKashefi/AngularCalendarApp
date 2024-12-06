@@ -2,6 +2,10 @@ h1 {
     text-align: center;
 }
 
+mat-icon {
+    color: black;
+}
+
 .week-days-lables,
 .week-days {
     display: grid;
@@ -30,7 +34,7 @@ h1 {
 
     :not(.is-current-month) {
         p {
-            color: rgb(141, 141, 141) !important;
+            color: rgb(161, 161, 161) !important;
         }
     }
 }

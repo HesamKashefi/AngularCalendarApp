@@ -1,84 +1,59 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, effect, OnInit, signal, WritableSignal } from '@angular/core';
 import { DisplayDatePipe } from '../../pipes/DisplayDate.pipe';
+import { CalendarService } from '../../services/Calendar.service';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { DisplayMonthPipe } from '../../pipes/DisplayMonth.pipe';
 
 @Component({
   selector: 'app-calendar',
   imports: [
-    DisplayDatePipe
+    DisplayDatePipe,
+    DisplayMonthPipe,
+
+    MatButtonModule,
+    MatIconModule
   ],
   templateUrl: './calendar.component.html',
   styleUrl: './calendar.component.scss'
 })
 export class CalendarComponent implements OnInit {
 
+  currentDate: WritableSignal<number> = signal(new Date().getTime());
+  currentMonthCalendar?: Date[][];
 
-  currentMonth?: Date[][];
-  currentMonthIndex?: number;
+  private dateUpdateEffect = effect(() => {
+    this.currentMonthCalendar = this.calendarService.generateMonth(new Date(this.currentDate()));
+  })
 
-  ngOnInit(): void {
-    const now = new Date();
-    const month = new Date(now.getFullYear(), now.getMonth() - 2, 1);
-    this.currentMonthIndex = month.getMonth();
-    this.currentMonth = this.generateMonth(month);
+  constructor(private calendarService: CalendarService) {
   }
 
+  ngOnInit(): void {
+  }
 
-  generateMonth(date: Date): Date[][] {
-    const month: { row: number, date: Date }[] = [];
+  onGoToNextMonth() {
+    this.currentDate.update(current => {
+      const date = new Date(current);
+      date.setMonth(date.getMonth() + 1);
+      return date.getTime();
+    });
+  }
 
-    const oneDayInMiliseconds = 24 * 60 * 60 * 1000;
-    const weekDayForTheFirstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1).getDay();
-    const lastDayOfPreviousMonth = new Date(date.getFullYear(), date.getMonth(), 0);
-
-    for (let dayInRow = weekDayForTheFirstDayOfMonth - 1; dayInRow >= 0; dayInRow--) {
-      month.push({
-        row: 0,
-        date: new Date(lastDayOfPreviousMonth.getTime() - oneDayInMiliseconds * dayInRow)
-      })
-    }
-
-    const tempDate = new Date(date.getFullYear(), date.getMonth(), 1);
-    while (tempDate.getMonth() === date.getMonth()) {
-      month.push({
-        row: Math.floor(month.length / 7),
-        date: new Date(tempDate.getTime())
-      });
-      tempDate.setDate(tempDate.getDate() + 1);
-    }
-
-    while (tempDate.getDay() !== 0) {
-      month.push({
-        row: Math.floor(month.length / 7),
-        date: new Date(tempDate.getTime())
-      })
-      tempDate.setDate(tempDate.getDate() + 1);
-    }
-
-    const dic: { [row: number]: Date[] } = {};
-    month.reduce((rv, x) => {
-      (rv[x.row] = rv[x.row] || []).push(x.date);
-      return rv;
-    }, dic);
-
-    return Object.keys(dic).map(x => dic[+x]);
+  onGoToPreviousMonth() {
+    this.currentDate.update(current => {
+      const date = new Date(current);
+      date.setMonth(date.getMonth() - 1);
+      return date.getTime();
+    });
   }
 
   isInTheCurrentMonth(date: Date) {
-    return date.getMonth() === this.currentMonthIndex;
+    return date.getMonth() === new Date(this.currentDate()).getMonth();
   }
 
-  /**
-   * calculates the number of days in the specified month of year
-   * @param year year
-   * @param month month (0 for janurary to 11 for december)
-   * @returns number of days in the month
-   */
-  private getNumberOfDaysInMonth(year: number, month: number) {
-    // using 0 as the day, will cause to create a date that points to the last
-    // day of the previous month
-    // so we also need to increment the month by one
-    // so the result is last day of the current month
-    return new Date(year, month + 1, 0).getDate();
+  timeToDate(time: number) {
+    return new Date(time);
   }
 
 }
