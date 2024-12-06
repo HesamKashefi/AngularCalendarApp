@@ -1,0 +1,16 @@
+<div class="date"
+     [class.is-current-month]="isInTheCurrentMonth()"
+     (click)="onCreateAppointment()">
+    <p>{{ date | appDisplayDate }}</p>
+
+    <div class="appointments">
+        @for(appointment of appointments; track appointment.appointmentId) {
+        <div class="appointment"
+             (click)="onEditAppointment(appointment); $event.stopPropagation();">
+            <p>
+                {{ appointment.time }} <i class="bi bi-pencil-fill"></i>
+            </p>
+        </div>
+        }
+    </div>
+</div>

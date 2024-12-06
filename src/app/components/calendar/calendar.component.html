@@ -22,7 +22,7 @@
 
     <div style="display: grid; gap: 0.5rem;">
 
-        <div class="week-days-lables">
+        <div class="week-days-labels">
             <div>
                 <p>Sunday</p>
             </div>
@@ -50,10 +50,9 @@
         @for(row of currentMonthCalendar; track index; let index = $index) {
         <div class="week-days">
             @for(day of row; track day) {
-            <div [class.is-current-month]="isInTheCurrentMonth(day)"
-                 (click)="onCreateAppointment(day)">
-                <p>{{ day | appDisplayDate }}</p>
-            </div>
+            <app-calendar-day [date]="day"
+                              [currentDate]="currentDate">
+            </app-calendar-day>
             }
         </div>
         }

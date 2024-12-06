@@ -6,7 +6,7 @@ mat-icon {
     color: black;
 }
 
-.week-days-lables,
+.week-days-labels,
 .week-days {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
@@ -19,22 +19,11 @@ mat-icon {
         align-items: center;
         border: 1px solid black;
         padding: 2rem;
+        gap: 0.5rem;
 
         p {
             font-weight: bold;
             margin: 0;
-        }
-    }
-}
-
-.week-days {
-    .is-current-month {
-        cursor: pointer;
-    }
-
-    :not(.is-current-month) {
-        p {
-            color: rgb(161, 161, 161) !important;
         }
     }
 }
