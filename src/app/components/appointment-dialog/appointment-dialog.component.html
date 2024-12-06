@@ -1,0 +1,46 @@
+<section>
+    <h1 mat-dialog-title>Appointment</h1>
+    <div mat-dialog-content>
+        <p>Creating an appointment at date: {{ data.date }}</p>
+        <form [formGroup]="form">
+
+            <div class="d-flex flex-column gap-3">
+                <mat-form-field appearance="outline">
+                    <mat-label>Time</mat-label>
+                    <input matInput
+                           type="time"
+                           formControlName="time">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Description</mat-label>
+                    <textarea matInput
+                              formControlName="description">
+
+                    </textarea>
+                </mat-form-field>
+            </div>
+        </form>
+    </div>
+    <div mat-dialog-actions>
+        <button mat-stroked-button
+                color="primary"
+                [disabled]="form.invalid || form.pristine"
+                (click)="submit()">
+            <div class="d-flex gap-2">
+                <i class="bi bi-floppy2"></i>
+                <span>save</span>
+            </div>
+        </button>
+
+        <button mat-stroked-button
+                color="accent"
+                (click)="cancel()">
+            <div class="d-flex gap-2">
+                <i class="bi bi-x-lg"></i>
+                <span>cancel</span>
+            </div>
+        </button>
+
+    </div>
+</section>

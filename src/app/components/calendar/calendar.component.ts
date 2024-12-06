@@ -4,6 +4,8 @@ import { CalendarService } from '../../services/Calendar.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { DisplayMonthPipe } from '../../pipes/DisplayMonth.pipe';
+import { MatDialog } from "@angular/material/dialog";
+import { AppointmentDialogComponent, AppointmentDialogData } from '../appointment-dialog/appointment-dialog.component';
 
 @Component({
   selector: 'app-calendar',
@@ -19,6 +21,10 @@ import { DisplayMonthPipe } from '../../pipes/DisplayMonth.pipe';
 })
 export class CalendarComponent implements OnInit {
 
+  /**
+   * represents the current time
+   * (A bug in Angular does not pick up changes if we use Date as the type)
+   */
   currentDate: WritableSignal<number> = signal(new Date().getTime());
   currentMonthCalendar?: Date[][];
 
@@ -26,7 +32,9 @@ export class CalendarComponent implements OnInit {
     this.currentMonthCalendar = this.calendarService.generateMonth(new Date(this.currentDate()));
   })
 
-  constructor(private calendarService: CalendarService) {
+  constructor(
+    private calendarService: CalendarService,
+    private matDialog: MatDialog) {
   }
 
   ngOnInit(): void {
@@ -56,4 +64,24 @@ export class CalendarComponent implements OnInit {
     return new Date(time);
   }
 
+
+  onCreateAppointment(date: Date) {
+
+    const data: AppointmentDialogData = {
+      date
+    };
+
+    this.matDialog.open(AppointmentDialogComponent,
+      {
+        data,
+        width: '70%',
+        height: '70%'
+      }
+    )
+      .afterClosed()
+      .subscribe(result => {
+        if (!result) return;
+
+      });
+  }
 }
