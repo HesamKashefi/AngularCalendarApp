@@ -4,9 +4,15 @@ import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { ExtractErrorsDirective } from '../../directives/extract-errors.directive';
 
 export interface AppointmentDialogData {
   date: Date;
+}
+export interface AppointmentDialogResult {
+  date: Date;
+  time: string;
+  description: string;
 }
 
 @Component({
@@ -14,6 +20,8 @@ export interface AppointmentDialogData {
   imports: [
     FormsModule,
     ReactiveFormsModule,
+
+    ExtractErrorsDirective,
 
     MatDialogModule,
     MatFormFieldModule,
@@ -26,8 +34,14 @@ export interface AppointmentDialogData {
 export class AppointmentDialogComponent implements OnInit {
 
   form = new FormGroup({
-    time: new FormControl(null, [Validators.required]),
-    description: new FormControl('', [Validators.required, Validators.minLength(1)])
+    time: new FormControl<string>('12:00', {
+      nonNullable: true,
+      validators: [Validators.required]
+    }),
+    description: new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.minLength(3)]
+    })
   });
 
 
@@ -42,7 +56,12 @@ export class AppointmentDialogComponent implements OnInit {
   submit() {
     if (this.form.invalid) return;
 
-    this.dialogRef.close(this.form.value);
+    const result: AppointmentDialogResult = {
+      date: this.data.date,
+      ...this.form.getRawValue()
+    };
+
+    this.dialogRef.close(result);
   }
 
   cancel() {

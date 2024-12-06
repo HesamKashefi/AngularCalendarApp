@@ -5,7 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { DisplayMonthPipe } from '../../pipes/DisplayMonth.pipe';
 import { MatDialog } from "@angular/material/dialog";
-import { AppointmentDialogComponent, AppointmentDialogData } from '../appointment-dialog/appointment-dialog.component';
+import { AppointmentDialogComponent, AppointmentDialogData, AppointmentDialogResult } from '../appointment-dialog/appointment-dialog.component';
 
 @Component({
   selector: 'app-calendar',
@@ -79,8 +79,10 @@ export class CalendarComponent implements OnInit {
       }
     )
       .afterClosed()
-      .subscribe(result => {
+      .subscribe((result: AppointmentDialogResult) => {
         if (!result) return;
+
+        console.log(result);
 
       });
   }

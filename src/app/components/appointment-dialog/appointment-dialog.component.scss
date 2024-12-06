@@ -1,0 +1,17 @@
+section {
+    height: 100%;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+
+    &:first-child {
+        grid-row: 1;
+    }
+
+    &:nth-child(2) {
+        grid-row: 2;
+    }
+
+    &:last-child {
+        grid-row: 3;
+    }
+}
