@@ -18,13 +18,13 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 export class CalendarDayComponent implements OnInit {
   private destroyRef$ = inject(DestroyRef);
 
-  appointments: Appointment[] = [];
-
   @Input({ required: true })
   date!: Date;
 
   @Input({ required: true })
   currentDate: WritableSignal<number> = signal(new Date().getTime());
+
+  appointments: Appointment[] = [];
 
   isThisDateInTheCurrentMonthScope = computed(() => {
     return this.date.getMonth() === new Date(this.currentDate()).getMonth();
@@ -41,11 +41,19 @@ export class CalendarDayComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.store
-      .pipe(takeUntilDestroyed(this.destroyRef$))
-      .subscribe(state => this.appointments = state.appointments.filter(x => x.date.getTime() === this.date.getTime()));
+    this.handleStoreEvents();
   }
 
+
+  private handleStoreEvents() {
+    this.store
+      .pipe(takeUntilDestroyed(this.destroyRef$))
+      .subscribe(state => {
+        // filter for current date's appointments
+        this.appointments = state.appointments
+          .filter(x => x.date.getTime() === this.date.getTime());
+      });
+  }
 
   onCreateAppointment() {
     const data: AppointmentDialogData = {

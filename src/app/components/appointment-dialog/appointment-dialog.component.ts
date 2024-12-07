@@ -39,7 +39,7 @@ export interface AppointmentDialogResult {
 export class AppointmentDialogComponent implements OnInit {
 
   form = new FormGroup({
-    time: new FormControl<string>('12:00', {
+    time: new FormControl<string>('10:25', {
       nonNullable: true,
       validators: [Validators.required]
     }),
