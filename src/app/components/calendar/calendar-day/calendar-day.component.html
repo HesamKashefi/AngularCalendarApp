@@ -1,7 +1,8 @@
 <div class="date"
-     [class.is-current-month]="isInTheCurrentMonth()"
+     [class.is-current-month]="isThisDateInTheCurrentMonthScope()"
+     [class.is-today]="isThisDateEqualToToday()"
      (click)="onCreateAppointment()">
-    <p>{{ date | appDisplayDate }}</p>
+    <p class="date-label">{{ date | appDisplayDate }}</p>
 
     <div class="appointments">
         @for(appointment of appointments; track appointment.appointmentId) {

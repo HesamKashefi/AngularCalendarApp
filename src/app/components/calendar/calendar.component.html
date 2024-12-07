@@ -1,7 +1,7 @@
 <div class="container">
     <h1>Calendar</h1>
 
-    <section class="d-flex flex-wrap align-items-center my-3">
+    <section class="d-flex flex-wrap align-items-center my-3 flex-column">
         <div class="d-flex flex-wrap gap-2 align-items-center m-auto">
             <button mat-icon-button
                     type="button"
@@ -18,6 +18,14 @@
                 <mat-icon fontIcon="arrow_right"></mat-icon>
             </button>
         </div>
+        <button mat-stroked-button
+                type="button"
+                (click)="onGoToCurrentDay()">
+            <div class="d-flex gap-2">
+                <span>Show Today</span>
+                <i class="bi bi-eye"></i>
+            </div>
+        </button>
     </section>
 
     <div style="display: grid; gap: 0.5rem;">
@@ -48,10 +56,10 @@
         </div>
         @if(currentMonthCalendar) {
 
-        @for(row of currentMonthCalendar; track index; let index = $index) {
+        @for(row of currentMonthCalendar; track (index + "_" + currentDate()); let index = $index) {
         <div class="week-days"
              [@listAnimation]="currentDate()">
-            @for(day of row; track day) {
+            @for(day of row; track day.getTime()) {
             <app-calendar-day [date]="day"
                               [currentDate]="currentDate">
             </app-calendar-day>

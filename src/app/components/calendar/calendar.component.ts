@@ -76,6 +76,12 @@ export class CalendarComponent implements OnInit {
     });
   }
 
+  onGoToCurrentDay() {
+    this.currentDate.update(_ => {
+      return new Date().getTime();
+    });
+  }
+
   timeToDate(time: number) {
     return new Date(time);
   }

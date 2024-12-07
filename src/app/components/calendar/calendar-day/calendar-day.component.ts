@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, Input, OnInit, signal, WritableSignal } from '@angular/core';
+import { Component, computed, DestroyRef, inject, Input, OnInit, signal, WritableSignal } from '@angular/core';
 import { AppointmentDialogData, AppointmentDialogComponent, AppointmentDialogResult } from '../../appointment-dialog/appointment-dialog.component';
 import { Store } from '@ngrx/store';
 import { Appointment } from '../../../models/appointment';
@@ -26,6 +26,15 @@ export class CalendarDayComponent implements OnInit {
   @Input({ required: true })
   currentDate: WritableSignal<number> = signal(new Date().getTime());
 
+  isThisDateInTheCurrentMonthScope = computed(() => {
+    return this.date.getMonth() === new Date(this.currentDate()).getMonth();
+  });
+
+  isThisDateEqualToToday = computed(() => {
+    const now = new Date();
+    return this.date.getFullYear() === now.getFullYear() && this.date.getMonth() === now.getMonth() && this.date.getDate() === now.getDate();
+  });
+
   constructor(
     private store: Store<{ appointments: Appointment[] }>,
     private matDialog: MatDialog) {
@@ -43,12 +52,14 @@ export class CalendarDayComponent implements OnInit {
       date: this.date
     };
 
-    this.matDialog.open(AppointmentDialogComponent,
+    const dialogRef = this.matDialog.open(AppointmentDialogComponent,
       {
         data,
         width: '70%'
       }
-    )
+    );
+
+    dialogRef
       .afterClosed()
       .subscribe((result: AppointmentDialogResult) => {
         if (!result) return;
@@ -62,21 +73,19 @@ export class CalendarDayComponent implements OnInit {
       appointment
     };
 
-    this.matDialog.open(AppointmentDialogComponent,
+    const dialogRef = this.matDialog.open(AppointmentDialogComponent,
       {
         data,
         width: '70%'
       }
-    )
+    );
+
+    dialogRef
       .afterClosed()
       .subscribe((result: AppointmentDialogResult) => {
         if (!result) return;
         this.store.dispatch(actions.appointmentsActions.removeAppointment({ appointmentId: result.appointmentId }))
         this.store.dispatch(actions.appointmentsActions.addAppointment({ appointment: result }))
       });
-  }
-
-  isInTheCurrentMonth() {
-    return this.date.getMonth() === new Date(this.currentDate()).getMonth();
   }
 }
