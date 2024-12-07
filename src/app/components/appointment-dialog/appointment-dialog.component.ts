@@ -4,10 +4,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { ExtractErrorsDirective } from '../../directives/extract-errors.directive';
 import { Appointment } from '../../models/appointment';
 import { Store } from '@ngrx/store';
 import * as actions from '../../store/actions/appointments.actions';
+import { provideNativeDateAdapter } from '@angular/material/core';
 
 export interface AppointmentDialogData {
   date: Date;
@@ -22,12 +24,14 @@ export interface AppointmentDialogResult {
 
 @Component({
   selector: 'app-appointment-dialog',
+  providers: [provideNativeDateAdapter()],
   imports: [
     FormsModule,
     ReactiveFormsModule,
 
     ExtractErrorsDirective,
 
+    MatDatepickerModule,
     MatDialogModule,
     MatFormFieldModule,
     MatInputModule,
@@ -39,6 +43,10 @@ export interface AppointmentDialogResult {
 export class AppointmentDialogComponent implements OnInit {
 
   form = new FormGroup({
+    date: new FormControl<Date>(new Date(), {
+      nonNullable: true,
+      validators: [Validators.required]
+    }),
     time: new FormControl<string>('10:25', {
       nonNullable: true,
       validators: [Validators.required]
@@ -61,12 +69,17 @@ export class AppointmentDialogComponent implements OnInit {
   }
 
   private updateForm() {
+    this.form.patchValue({
+      date: this.data.date,
+    });
+
     const appointment = this.data?.appointment;
     if (!appointment) {
       return;
     }
 
     this.form.patchValue({
+      date: appointment.date,
       time: appointment.time,
       description: appointment.description
     });
@@ -78,7 +91,7 @@ export class AppointmentDialogComponent implements OnInit {
     const result: AppointmentDialogResult = {
       // init if this is not an update
       appointmentId: new Date().getTime().toString(),
-      date: this.data.date,
+      // date: this.data.date,
 
       // override
       ...this.data?.appointment,
