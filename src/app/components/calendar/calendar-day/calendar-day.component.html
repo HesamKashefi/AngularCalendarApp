@@ -1,0 +1,30 @@
+<div class="date"
+     [class.is-current-month]="isThisDateInTheCurrentMonthScope()"
+     [class.is-today]="isThisDateEqualToToday()"
+     (click)="onCreateAppointment()">
+    <p class="date-label">{{ date | appDisplayDate }}</p>
+
+    <div class="appointments"
+         cdkDropList
+         [id]="date.getTime().toString()"
+         [cdkDropListData]="appointments"
+         (cdkDropListDropped)="dropAppointment($event)">
+        @for(appointment of appointments; track appointment.appointmentId) {
+        <div class="appointment"
+             cdkDrag
+             [cdkDragData]="appointment"
+             [title]="appointment.description"
+             (click)="onEditAppointment(appointment); $event.stopPropagation();">
+            <p>
+                {{ appointment.time }}
+                <i class="bi bi-pencil-fill"></i>
+            </p>
+
+            <i class="bi bi-arrows-move"
+               (click)="$event.stopPropagation();"
+               cdkDragHandle>
+            </i>
+        </div>
+        }
+    </div>
+</div>

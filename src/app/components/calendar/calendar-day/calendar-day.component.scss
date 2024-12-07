@@ -1,0 +1,64 @@
+.date {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid black;
+    gap: 0.5rem;
+    width: 12rem;
+    height: 8rem;
+
+    overflow-y: auto;
+
+
+    position: relative;
+
+    &.is-today {
+        background-color: rgb(190, 234, 248);
+    }
+
+    &.is-current-month {
+        cursor: pointer;
+    }
+
+    &:not(.is-current-month) {
+        background-color: rgb(240, 240, 240);
+
+        p.date-label {
+            color: rgb(161, 161, 161);
+        }
+    }
+
+    p {
+        font-weight: bold;
+        margin: 0;
+
+        &.date-label {
+            position: absolute;
+            left: 0.5em;
+            top: 0.5em;
+        }
+    }
+}
+
+.appointments {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.2em;
+    height: 100%;
+    width: 100%;
+
+    .appointment {
+        background-color: rgb(199, 199, 199);
+        padding: 0.2em 0.4em;
+
+        display: flex;
+        align-items: center;
+        gap: 0.5em;
+
+        p {
+            color: black !important;
+        }
+    }
+}
