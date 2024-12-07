@@ -4,9 +4,10 @@
     align-items: center;
     border: 1px solid black;
     gap: 0.5rem;
-    height: 100%;
     width: 12rem;
     height: 8rem;
+
+    overflow-y: auto;
 
 
     position: relative;

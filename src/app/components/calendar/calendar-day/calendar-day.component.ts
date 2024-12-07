@@ -57,7 +57,8 @@ export class CalendarDayComponent implements OnInit {
       .subscribe(state => {
         // filter for current date's appointments
         this.appointments = state.appointments
-          .filter(x => x.date.getTime() === this.date.getTime());
+          .filter(x => x.date.getTime() === this.date.getTime())
+          .sort((a, b) => (new Date('2025-01-01T' + a.time).getTime() - new Date('2025-01-01T' + b.time).getTime()));
       });
   }
 
