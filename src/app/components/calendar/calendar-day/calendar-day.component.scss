@@ -3,9 +3,10 @@
     justify-content: center;
     align-items: center;
     border: 1px solid black;
-    padding: 2rem;
     gap: 0.5rem;
     height: 100%;
+    width: 12rem;
+    height: 8rem;
 
 
     position: relative;
@@ -44,10 +45,16 @@
     justify-content: center;
     align-items: center;
     gap: 0.2em;
+    height: 100%;
+    width: 100%;
 
     .appointment {
         background-color: rgb(199, 199, 199);
         padding: 0.2em 0.4em;
+
+        display: flex;
+        align-items: center;
+        gap: 0.5em;
 
         p {
             color: black !important;

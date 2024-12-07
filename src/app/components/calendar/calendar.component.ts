@@ -8,21 +8,17 @@ import { Appointment } from '../../models/appointment';
 import * as actions from '../../store/actions/appointments.actions';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CalendarDayComponent } from './calendar-day/calendar-day.component';
-import { animate, query, stagger, style, transition, trigger } from '@angular/animations';
-const listAnimation = trigger('listAnimation', [
-  transition(':enter', [
-    query('*',
-      [style({ opacity: 0 }), stagger('60ms', animate('600ms ease-out', style({ opacity: 1 })))],
-      { optional: true }
-    ),
-  ])
-]);
+import { listAnimation } from '../../animations/list-animation';
+import { CdkDropListGroup } from '@angular/cdk/drag-drop';
+
 @Component({
   selector: 'app-calendar',
   imports: [
     CalendarDayComponent,
 
     DisplayMonthPipe,
+
+    CdkDropListGroup,
 
     MatButtonModule,
     MatIconModule
