@@ -1,8 +1,13 @@
 <section>
-    <h1 mat-dialog-title>Appointment</h1>
+    <h1 mat-dialog-title>
+        @if(data.appointment) {
+            Edit Appointment
+        }
+        @else {
+            Create an Appointment
+        }
+    </h1>
     <div mat-dialog-content>
-        <p>Creating an appointment at date:</p>
-        <p>{{ data.date }}</p>
         <form [formGroup]="form">
 
             <div class="d-flex flex-column gap-3">
