@@ -8,14 +8,12 @@ import * as actions from '../../../store/actions/appointments.actions';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
 import { MatButtonModule } from '@angular/material/button';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-calendar-day',
   imports: [
     DisplayDatePipe,
-
-    RouterLink,
 
     CdkDrag,
     CdkDropList,
@@ -88,15 +86,13 @@ export class CalendarDayComponent implements OnInit {
       .afterClosed()
       .subscribe((result: AppointmentDialogResult) => {
         if (!result) return;
-        this.store.dispatch(actions.appointmentsActions.removeAppointment({ appointmentId: result.appointmentId }))
-        this.store.dispatch(actions.appointmentsActions.addAppointment({ appointment: result }))
+        this.store.dispatch(actions.appointmentsActions.updateAppointment({ appointment: result }))
       });
   }
 
 
   dropAppointment(event: CdkDragDrop<Appointment[], Appointment, any>) {
     const appointment: Appointment = { ...event.item.data, date: new Date(this.date.getTime()) }
-    this.store.dispatch(actions.appointmentsActions.removeAppointment({ appointmentId: appointment.appointmentId }))
-    this.store.dispatch(actions.appointmentsActions.addAppointment({ appointment: appointment }))
+    this.store.dispatch(actions.appointmentsActions.updateAppointment({ appointment: appointment }))
   }
 }

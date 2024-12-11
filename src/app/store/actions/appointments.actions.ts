@@ -7,6 +7,7 @@ export const appointmentsActions = createActionGroup({
     events: {
         'Add Appointment': props<{ appointment: Appointment }>(),
         'Remove Appointment': props<{ appointmentId: string }>(),
+        'Update Appointment': props<{ appointment: Appointment }>(),
         'Set Appointments': props<{ appointments: Appointment[] }>(),
     }
 })
