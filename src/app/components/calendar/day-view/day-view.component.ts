@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Appointment } from '../../../models/appointment';
 import { CalendarService } from '../../../services/Calendar.service';
 import { MatButtonModule } from '@angular/material/button';
-import { DisplayFullDatePipe } from '../../../pipes/dispaly-full-date.pipe';
+import { DisplayFullDatePipe } from '../../../pipes/display-full-date.pipe';
+import { AppointmentDialogComponent, AppointmentDialogData, AppointmentDialogResult } from '../../appointment-dialog/appointment-dialog.component';
+import * as actions from '../../../store/actions/appointments.actions';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-day-view',
@@ -26,7 +29,7 @@ export class DayViewComponent implements OnInit {
     private calendarService: CalendarService,
     private store: Store<{ appointments: Appointment[] }>,
     private route: ActivatedRoute,
-    private router: Router) {
+    private matDialog: MatDialog) {
 
   }
 
@@ -55,23 +58,44 @@ export class DayViewComponent implements OnInit {
   }
 
   onCreateAppointment() {
-    // const data: AppointmentDialogData = {
-    //   date: this.date
-    // };
+    const data: AppointmentDialogData = {
+      date: this.date!
+    };
 
-    // const dialogRef = this.matDialog.open(AppointmentDialogComponent,
-    //   {
-    //     data,
-    //     width: '70%'
-    //   }
-    // );
+    const dialogRef = this.matDialog.open(AppointmentDialogComponent,
+      {
+        data,
+        width: '70%'
+      }
+    );
 
-    // dialogRef
-    //   .afterClosed()
-    //   .subscribe((result: AppointmentDialogResult) => {
-    //     if (!result) return;
-    //     this.store.dispatch(actions.appointmentsActions.addAppointment({ appointment: result }))
-    //   });
+    dialogRef
+      .afterClosed()
+      .subscribe((result: AppointmentDialogResult) => {
+        if (!result) return;
+        this.store.dispatch(actions.appointmentsActions.addAppointment({ appointment: result }))
+      });
   }
 
+
+  onEditAppointment(appointment: Appointment) {
+    const data: AppointmentDialogData = {
+      date: this.date!,
+      appointment
+    };
+
+    const dialogRef = this.matDialog.open(AppointmentDialogComponent,
+      {
+        data,
+        width: '70%'
+      }
+    );
+
+    dialogRef
+      .afterClosed()
+      .subscribe((result: AppointmentDialogResult) => {
+        if (!result) return;
+        this.store.dispatch(actions.appointmentsActions.updateAppointment({ appointment: result }))
+      });
+  }
 }

@@ -1,4 +1,4 @@
-import { inject, Pipe, type PipeTransform } from '@angular/core';
+import { Pipe, PipeTransform } from '@angular/core';
 import { CalendarService } from '../services/Calendar.service';
 
 @Pipe({

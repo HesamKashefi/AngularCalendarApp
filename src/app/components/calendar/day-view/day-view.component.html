@@ -8,6 +8,11 @@
         </a>
 
         <h1 class="display-2">Day {{ date | appDisplayFullDate }}</h1>
+
+        <button mat-stroked-button
+                (click)="onCreateAppointment()">
+            Create Appointment
+        </button>
     </div>
 
     <div class="table-responsive">
@@ -27,7 +32,8 @@
                     <td>
                         <div class="appointments">
                             @for(appointment of getAppointmentsByHour(hour); track appointment.appointmentId) {
-                            <div class="appointment">
+                            <div class="appointment"
+                                 (click)="onEditAppointment(appointment)">
                                 <p>{{ appointment.time }} {{ appointment.description }}</p>
                             </div>
                             }
