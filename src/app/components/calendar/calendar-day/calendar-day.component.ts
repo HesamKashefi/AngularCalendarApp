@@ -8,11 +8,14 @@ import * as actions from '../../../store/actions/appointments.actions';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
 import { MatButtonModule } from '@angular/material/button';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-calendar-day',
   imports: [
     DisplayDatePipe,
+
+    RouterLink,
 
     CdkDrag,
     CdkDropList,
@@ -43,6 +46,7 @@ export class CalendarDayComponent implements OnInit {
 
   constructor(
     private store: Store<{ appointments: Appointment[] }>,
+    private router: Router,
     private matDialog: MatDialog) {
   }
 
@@ -62,24 +66,9 @@ export class CalendarDayComponent implements OnInit {
       });
   }
 
-  onCreateAppointment() {
-    const data: AppointmentDialogData = {
-      date: this.date
-    };
-
-    const dialogRef = this.matDialog.open(AppointmentDialogComponent,
-      {
-        data,
-        width: '70%'
-      }
-    );
-
-    dialogRef
-      .afterClosed()
-      .subscribe((result: AppointmentDialogResult) => {
-        if (!result) return;
-        this.store.dispatch(actions.appointmentsActions.addAppointment({ appointment: result }))
-      });
+  onOpenDate() {
+    const dateString = `${this.date.getFullYear()}-${this.date.getMonth() + 1}-${this.date.getDate()}`;
+    this.router.navigate(['/day', dateString]);
   }
 
   onEditAppointment(appointment: Appointment) {

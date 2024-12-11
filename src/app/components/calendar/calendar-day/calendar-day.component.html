@@ -1,7 +1,7 @@
 <div class="date"
      [class.is-current-month]="isThisDateInTheCurrentMonthScope()"
      [class.is-today]="isThisDateEqualToToday()"
-     (click)="onCreateAppointment()">
+     (click)="onOpenDate()">
     <p class="date-label">{{ date | appDisplayDate }}</p>
 
     <div class="appointments"
