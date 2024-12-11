@@ -34,6 +34,8 @@ export class DayViewComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.store.dispatch(actions.appointmentsAPIActions.fetchAllAppointments());
+
     this.route.params.subscribe(params => {
       const date: string = params['date'];
       this.date = new Date(date);
@@ -41,15 +43,22 @@ export class DayViewComponent implements OnInit {
     });
 
     this.store.select(x => x.appointments)
-      .subscribe(x => this.appointments = x)
+      .subscribe(appointments => {
+        this.appointments = appointments
+          .filter(x => {
+            console.log(x, new Date(x.date), this.calendarService.getDateString(new Date(x.date)), new Date(this.calendarService.getDateString(new Date(x.date))));
+
+            return this.calendarService.areDatesEqual(new Date(this.calendarService.getDateString(new Date(x.date))), this.date!);
+          });
+      })
   }
 
   getAppointmentsByHour(hour: number) {
     return this.appointments.filter(x => {
       const dateString = this.calendarService.getDateString(this.date!);
-      const appointmentDateTime = new Date(`${dateString}T${x.time}`).getTime();
-      const currentHour = new Date(`${dateString}T${hour}:00:00`);
-      const nextHour = new Date(`${dateString}T${hour}:00:00`);
+      const appointmentDateTime = new Date(`${dateString}T${x.time}:00.000Z`).getTime();
+      const currentHour = new Date(`${dateString}T${String(hour).padStart(2, '0')}:00:00.000Z`);
+      const nextHour = new Date(`${dateString}T${String(hour).padStart(2, '0')}:00:00.000Z`);
       nextHour.setHours(currentHour.getHours() + 1);
 
       return currentHour.getTime() <= appointmentDateTime &&
