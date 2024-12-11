@@ -9,6 +9,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
 import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
+import { CalendarService } from '../../../services/Calendar.service';
 
 @Component({
   selector: 'app-calendar-day',
@@ -39,10 +40,11 @@ export class CalendarDayComponent implements OnInit {
 
   isThisDateEqualToToday = computed(() => {
     const now = new Date();
-    return this.date.getFullYear() === now.getFullYear() && this.date.getMonth() === now.getMonth() && this.date.getDate() === now.getDate();
+    return this.calendarService.areDatesEqual(this.date, now);
   });
 
   constructor(
+    private calendarService: CalendarService,
     private store: Store<{ appointments: Appointment[] }>,
     private router: Router,
     private matDialog: MatDialog) {
@@ -65,7 +67,7 @@ export class CalendarDayComponent implements OnInit {
   }
 
   onOpenDate() {
-    const dateString = `${this.date.getFullYear()}-${this.date.getMonth() + 1}-${this.date.getDate()}`;
+    const dateString = this.calendarService.getDateString(this.date);
     this.router.navigate(['/day', dateString]);
   }
 

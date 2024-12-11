@@ -7,6 +7,17 @@ export class CalendarService {
 
   constructor() { }
 
+  areDatesEqual(a: Date, b: Date) {
+    return a.getFullYear() === b.getFullYear() &&
+      a.getMonth() === b.getMonth() &&
+      a.getDate() === b.getDate();
+  }
+
+  getDateString(date: Date) {
+    const dateString = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+    return dateString;
+  }
+
   /**
    * generates dates needed to display in a calendar for a month
    * @param date a date to determine the month
