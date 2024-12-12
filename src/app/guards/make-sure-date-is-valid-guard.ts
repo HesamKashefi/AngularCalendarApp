@@ -13,9 +13,18 @@ export const makeSureDateIsValidGuard: CanActivateFn = (
         router.navigateByUrl('calendar');
         return false;
     }
+
+    if (/^\d{4}-\d{2}-\d{2}$/.test(date) === false) {
+        router.navigateByUrl('calendar');
+        return false;
+    }
+
     const dateParts = date.split('-');
 
-    if (dateParts.length !== 3 || dateParts.findIndex(part => isNaN(+part)) >= 0) {
+    if (dateParts.length !== 3 ||
+        +dateParts[0] < 1 ||
+        +dateParts[1] < 1 || +dateParts[1] > 12 ||
+        +dateParts[2] < 1 || +dateParts[1] > 31) {
         router.navigateByUrl('calendar');
         return false;
     }
