@@ -14,7 +14,7 @@ export class CalendarService {
   }
 
   getDateString(date: Date) {
-    const dateString = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+    const dateString = `${this.padZero(date.getFullYear())}-${this.padZero(date.getMonth() + 1)}-${this.padZero(date.getDate())}`;
     return dateString;
   }
 
@@ -81,4 +81,7 @@ export class CalendarService {
     return new Date(year, month + 1, 0).getDate();
   }
 
+  private padZero(number: number) {
+    return String(number).padStart(2, '0')
+  }
 }

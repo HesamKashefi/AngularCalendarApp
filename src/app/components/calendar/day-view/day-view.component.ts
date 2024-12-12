@@ -39,15 +39,12 @@ export class DayViewComponent implements OnInit {
     this.route.params.subscribe(params => {
       const date: string = params['date'];
       this.date = new Date(date);
-      console.log(this.date);
     });
 
     this.store.select(x => x.appointments)
       .subscribe(appointments => {
         this.appointments = appointments
           .filter(x => {
-            console.log(x, new Date(x.date), this.calendarService.getDateString(new Date(x.date)), new Date(this.calendarService.getDateString(new Date(x.date))));
-
             return this.calendarService.areDatesEqual(new Date(this.calendarService.getDateString(new Date(x.date))), this.date!);
           });
       })
