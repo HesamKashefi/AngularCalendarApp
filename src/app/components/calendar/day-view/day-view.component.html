@@ -1,13 +1,13 @@
 <section class="container">
 
-    <div class="d-flex align-items-center gap-3 flex-wrap">
+    <div class="d-flex align-items-center justify-content-between gap-3 flex-wrap">
         <a mat-stroked-button
            routerLink="/calendar"
            class="my-2">
             Return
         </a>
 
-        <h1 class="display-2">Day {{ date | appDisplayFullDate }}</h1>
+        <h1 class="display-2"><span style="font-weight: 500;">Day</span> {{ date | appDisplayFullDate }}</h1>
 
         <button mat-stroked-button
                 (click)="onCreateAppointment()">

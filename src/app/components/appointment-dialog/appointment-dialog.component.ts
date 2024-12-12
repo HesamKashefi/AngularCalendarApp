@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
@@ -10,6 +10,8 @@ import { Appointment } from '../../models/appointment';
 import { Store } from '@ngrx/store';
 import * as actions from '../../store/actions/appointments.actions';
 import { provideNativeDateAdapter } from '@angular/material/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { debounceTime } from 'rxjs';
 
 export interface AppointmentDialogData {
   date: Date;
@@ -41,6 +43,7 @@ export interface AppointmentDialogResult {
   styleUrl: './appointment-dialog.component.scss'
 })
 export class AppointmentDialogComponent implements OnInit {
+  private destroyRef$ = inject(DestroyRef);
 
   form = new FormGroup({
     date: new FormControl<Date>(new Date(), {
@@ -66,6 +69,14 @@ export class AppointmentDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.updateForm();
+
+    this.form.valueChanges
+      .pipe(
+        debounceTime(100),
+        takeUntilDestroyed(this.destroyRef$))
+      .subscribe(formValue => {
+        console.log(formValue);
+      });
   }
 
   private updateForm() {
